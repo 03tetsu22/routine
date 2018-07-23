@@ -1,0 +1,210 @@
+@charset "UTF-8";
+
+/*.main-header{
+    background-color: #e2599b;
+}
+.navbar-brand{
+    color: #ffffff;
+}
+.white{
+    color: #ffffff;   
+}
+.hover :hover{
+    background-color: #ce3b81!important;
+    color: #f2f2f2;
+}
+*/
+html{
+    height: 100%;
+}
+body{
+    margin: 0;
+    height: 100%;
+}
+header{
+    background-color: #e2599b;
+    color: #ffffff;
+}
+a{
+    color: #d24848 !important;
+}
+/*レイアウト*/
+.main-header{
+    margin: 0px 40px 0px;
+}
+.title{
+    display: inline-block;
+    font-size: 20px;
+    margin: 10px;
+
+}
+.head-menu{
+    float: right;
+    list-style-type: none;
+    margin-top: 15px;
+    /*vertical-align: middle;*/
+}
+.head-menu li{
+    /*float: left;*/
+    display: block;
+
+}
+#logout-form{
+    display: none;
+}
+.side{
+    background-color: #f2f2f2;
+    float: left;
+    height: 100%;
+    width: 200px;
+}
+.login-form{
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #c2c2c2;
+    border-radius: 5px;
+}
+.margin-auto{
+    margin: 0 auto;
+}
+.login-top{
+    border-bottom: 1px solid #c2c2c2;
+    margin-bottom: 10px;
+}
+.width100{
+    width: 100% !important;
+}
+
+/*----------コンポーネント------------*/
+/*サイドバーメニュー*/
+.sidebar{
+    margin: 0;
+    list-style-type: none;
+    /*background-color: #d2d6de;*/
+    padding: 0;
+}
+.sidebar > li{
+    margin: 10px;
+}
+.sidebar .large-sidebar > ul{
+    padding: 0;
+}
+.sidebar .small-sidebar{
+    /*background-color: #f9fafc;*/
+    width: 100%;
+    padding-left: 15px;
+}
+.main-contents-index{
+    background-color: #ffffff;
+    margin-left: 200px;
+}
+.routine{
+    display: inline-block;
+}
+.contents-name{
+    font-size: 20px;
+    position: relative;
+    margin: 10px;
+    overflow: hidden;
+}
+.routine-register{
+    background-color: #eaeef1;
+    padding: 15px;
+}
+.routine-space{
+    width: 40%;
+    float: left;
+    overflow: hidden;
+}
+.area{
+    align-items: center;
+    border: 1px solid #a1a1a1;
+    display: flex;
+    height: 60px;
+    margin: 0 auto;
+    margin-top: 10px;
+    /*text-align: center;*/
+    width: 40%;
+}
+.area:hover{
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+.background{
+    background-color: #f2f2f2;   
+}
+.space-name{
+    margin: 0 auto;
+
+}
+.routine{
+    text-align: center;
+    width: 60%;
+}
+/*ranking.blade.php*/
+.main-contents-rank{
+    background-color: #ffffff;
+    margin-left: 300px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+.rank-top{
+    margin: 10px;
+    overflow: hidden;
+    position: relative;
+}
+.rank-day{
+    float: left;
+    font-size: 20px;
+    left: 40%;
+    position: relative;
+}
+.month-search{
+    float: right;
+    position: relative;
+}
+.rank-top > div >select{
+    /*float: right;*/
+    position: relative;
+}
+.rank-top > div > button{
+    /*float: right;*/
+    position: relative;
+    /*right: 30%;*/
+}
+.rank-table,.staff-table {
+    text-align: center;
+}
+.rank-table > td{
+    /*border: 1px solid #000000!important;*/
+    font-size: 20px;
+}
+.rank-fromto{
+    float: left;
+    font-size: 20px;
+    position: relative;
+}
+/*staff.blade.php*/
+.staff-admin{
+    font-size: 20px;
+    position: relative;
+    margin: 10px;
+    overflow: hidden;
+}
+.staff{
+    overflow: hidden;
+}
+.form-staff{
+    float: left;
+    width: 40%;
+}
+/*.form-staff > form > div > div > input{
+    width: 90%;
+}*/
+.staff-list{
+    display: inline-block!important;
+    width: 60%!important;
+}
+/*.form-staff{
+    margin: 10px;
+}*/
