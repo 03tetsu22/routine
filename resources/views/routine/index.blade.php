@@ -34,9 +34,11 @@
                 <label>ポイント</label>
                 <select name="point">
                     <option value="">未設定</option> 
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    @foreach($point as $val)
+                    <option value="{{$val->id}}" @if (old('point') == $val->id)
+                            selected
+                        @endif>{{$val->point}}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-group">
@@ -107,13 +109,21 @@
                 <tbody>
                     @foreach($routines as $routine)
                     <tr>
-                        <td>{{$routine->routine_name}}</td>
-                        <td>{{$routine->point}}</td>
+                        <td><div class="routine-table" title="" data-toggle="popover" 
+                            @foreach($weekdone as $val)
+                                @if($routine->routine_name == $val->routine_name)
+                                    data-content="ここ一週間で{{$routine->routine_name}}は実施されています。"
+                                    @break
+                                @endif
+                            @endforeach data-placement="top">{{$routine->routine_name}}</div></td>
+
+                        <td>{{$routine->pt->point}}</td>
                         <td>{{$routine->frequency->frequency}}</td>
                         <td><form action="{{ url('routine/register') }}" method="POST" class="form-inline">
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-primary btn-sm">登録</button>
                             <input type="hidden" name="routine_name" value="{{$routine->routine_name}}">
+                            <input type="hidden" name="space" value="{{$routine->space->space}}">
                             <input type="hidden" name="point" value="{{$routine->point}}">
                             </form>
                         </td>

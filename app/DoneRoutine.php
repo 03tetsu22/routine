@@ -10,5 +10,9 @@ class DoneRoutine extends Model
     {
         return $this->belongsTo(Staff::class, 'm_staff_id');
     }
+    public function pt()
+    {
+        return $this->belongsTo(point::class, 'point');
+    }
     protected $table = 't_done_routine';
 }

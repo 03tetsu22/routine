@@ -8,7 +8,9 @@ if ($_GET) {
     $month = date('n', $x);
     // dd($_GET, $select_date);
 }
-    // $x = date_format($x, 'Y');
+$rank = 0;
+$count = 1;
+$lastscore = 100000;
 ?>
 <div class="main-contents-rank">
 
@@ -32,7 +34,7 @@ if ($_GET) {
                                     echo 'selected';
                                 }
                                 ?>
-                                >{{date_format(date_create($date), 'Y')}}年{{date_format(date_create($date), 'n')}}月
+                                >{{date_format(date_create($date), 'Y年n月')}}
                                 </option>
                             @endforeach
                             @if ($max < date('Y-m'))
@@ -48,13 +50,65 @@ if ($_GET) {
                         <tbody>
                             @foreach($done_routine as $result)
                             <tr>
+                                <?php
+                                if ($result->sum < $lastscore) {
+                                    $rank = $rank + $count;
+                                    switch ($rank) {
+                                        case 1:
+                                            echo '<td class="first">'.$rank.'st</td>';
+                                            break;
+                                        case 2:
+                                            echo '<td class="second">'.$rank.'nd</td>';
+                                            break;
+                                        case 3:
+                                            echo '<td class="third">'.$rank.'rd</td>';
+                                            break;
+                                        default:
+                                            echo '<td>'.$rank.'th</td>';
+                                            break;
+                                    }
+                                    $lastscore = $result->sum;
+                                    $count = 1;
+                                } elseif ($result->sum == $lastscore) {
+                                    switch ($rank) {
+                                        case 1:
+                                             echo '<td class="first">'.$rank.'st</td>';
+                                            break;
+                                        case 2:
+                                            echo '<td class="second">'.$rank.'nd</td>';
+                                            break;
+                                        case 3:
+                                            echo '<td class="third">'.$rank.'rd</td>';
+                                            break;
+                                        default:
+                                            echo '<td>'.$rank.'th</td>';
+                                            break;
+                                    }
+                                    $count++;
+                                }
+                                ?></td>
                                 <td>{{$result->staff->family_name}}</td>
                                 <td>{{$result->sum}}</td>
                             </tr>
                             @endforeach
+                            <?php $rank++; ?>
                             @if(!empty($zero_family))
                                 @foreach($zero_family as $family)
                                 <tr>
+                                    @switch($rank)
+                                        @case(1)
+                                            <td class="first">{{ $rank.'st' }}</td>
+                                            @break
+                                        @case(2)
+                                            <td class="second">{{ $rank.'nd' }}</td>
+                                            @break
+                                        @case(3)
+                                            <td class="third">{{ $rank.'rd' }}</td>
+                                            @break
+                                        @default
+                                            <td>{{ $rank.'th' }}</td>
+                                            @break
+                                    @endswitch
                                     <td>{{$family}}</td>
                                     <td>0</td>
                                 </tr>

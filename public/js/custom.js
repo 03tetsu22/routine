@@ -25,4 +25,19 @@ $(function(){
             .next().hide();
         }
     });
+    $('[data-toggle=tooltip-tool]').tooltip();
+    $("[data-toggle=popover]").popover({
+        trigger: 'hover',
+    });
+    $('.first').siblings().addClass('first-font');
+    if($('.pt-month').hasClass('out')){
+        $('.month').addClass('danger');
+    }else if($('.pt-month').hasClass('clear')){
+        $('.month').addClass('safe');
+    }
+    if($('.pt-year').hasClass('out')){
+        $('.year').addClass('danger');
+    }else if($('.pt-year').hasClass('clear')){
+        $('.year').addClass('safe');
+    }
 });

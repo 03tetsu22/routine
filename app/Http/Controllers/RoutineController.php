@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Staff;
 use App\Routine;
 use App\Space;
+use App\Point;
 use App\Frequency;
 use App\DoneRoutine;
 use App\Http\Requests;
@@ -18,22 +19,41 @@ use DateTime;
 
 class RoutineController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    public function home()
+    {
+        $id = Auth::id();
+        $today = date('Y-m');
+        $score_month = DoneRoutine::select(DB::raw("m_staff_id,sum(point) as sum"))->where('created_at', 'like', $today.'%')->where('m_staff_id', $id)->get();
+        $today = date('Y');
+        $score_year = DoneRoutine::select(DB::raw("m_staff_id,sum(point) as sum"))->where('created_at', 'like', $today.'%')->where('m_staff_id', $id)->get();
+        return view('routine.home', [
+            'score_month' => $score_month,
+            'score_year' => $score_year,
+        ]);
+    }
     public function index(Request $request)
     {
         $space = Space::get();
+        $point = Point::orderBy('point', 'asc')->get();
         $frequency = Frequency::get();
-        $routines = Routine::with('frequency')->get();
+        $routines = Routine::with('frequency')->with('space')->with('pt')->get();
         if ($request->select) {
             $routines = $routines->where('m_space_id', $request->select);
         }
-        $frequency_show = Frequency::get()->pluck('frequency', 'id');
-        // dd($routines);
+        $today = date('Y-m-d', strtotime('+1 day', time()));
+        $weekago = new DateTime($today);
+        $weekago = $weekago->modify('-8 days')->format('Y-m-d');
+        $weekdone = DoneRoutine::wherebetween('created_at', [$weekago, $today])->get();
         return view('routine.index', [
             'routines' => $routines,
             'space' => $space,
+            'point' => $point,
             'frequency' => $frequency,
-
-            'frequency_show' => $frequency_show,
+            'weekdone' => $weekdone,
         ]);
     }
     public function store(RoutineRequest $request)
@@ -53,6 +73,7 @@ class RoutineController extends Controller
         $routine = new DoneRoutine();
         $routine->m_staff_id = Auth::id();
         $routine->routine_name = $request->routine_name;
+        $routine->space = $request->space;
         $routine->point = $request->point;
         $routine->save();
         $request->session()->flash('message', '実施した"'.$routine->routine_name.'"を登録しました。');
@@ -63,10 +84,12 @@ class RoutineController extends Controller
         // dd($id);
         $routine = Routine::find($id);
         $space = Space::get();
+        $point = Point::get();
         $frequency = Frequency::get();
         return view('routine.edit', [
             'routine' => $routine,
             'space' => $space,
+            'point' => $point,
             'frequency' => $frequency,
         ]);
     }
@@ -86,6 +109,21 @@ class RoutineController extends Controller
         $routine->delete();
         $request->session()->flash('message', '"'.$routine->routine_name.'"を削除しました。');
         return redirect('/routine');
+    }
+    public function history(Request $request)
+    {
+        $staffs = Staff::get();
+        if ($request->id) {
+            $select_staff = $request->id;
+        } else {
+            $select_staff = Auth::id();
+        }
+        $history = DoneRoutine::where('m_staff_id', $select_staff)->orderBy('created_at', 'desc')->with('pt')->get();
+        return view('/routine/history', [
+            'staffs' => $staffs,
+            'select_staff' => $select_staff,
+            'history' => $history,
+        ]);
     }
     public function rank()
     {
@@ -194,13 +232,18 @@ class RoutineController extends Controller
     }
     public function rankDate(Request $request)
     {
+        $mes = 1;
         if ($_GET) {
-            // dd($_GET);
-            $from = $_GET['from'];
-            $to = $_GET['to'];
-            $done_routine = DoneRoutine::select(DB::raw("m_staff_id,sum(point) as sum"))->wherebetween('created_at', [$from, $to])->groupBy('m_staff_id')->orderBy('sum', 'desc')->with('staff')->get(['m_staff_id'])->toArray();
-            if ($from >= $to) {
-                $request->session()->flash('message', '日付の設定が正しくありません。');
+            $from = $request->from;
+            $to = $request->to;
+            if ($from && $to && $from == $to) {
+                $done_routine = DoneRoutine::select(DB::raw("m_staff_id,sum(point) as sum"))->where('created_at', 'like', $from.'%')->groupBy('m_staff_id')->orderBy('sum', 'desc')->with('staff')->get(['m_staff_id']);
+            } else {
+                $done_routine = DoneRoutine::select(DB::raw("m_staff_id,sum(point) as sum"))->wherebetween('created_at', [$from, $to])->groupBy('m_staff_id')->orderBy('sum', 'desc')->with('staff')->get(['m_staff_id']);
+            }
+            if ($from > $to || $done_routine->isEmpty()) {
+                // $message = $request->session()->flash('message', '日付の設定が正しくありません。');
+                $mes = '日付の設定が正しくありません。';
             }
             $staffs = Staff::get();
             $zero_family = [];
@@ -226,9 +269,12 @@ class RoutineController extends Controller
                 'zero_family' => $zero_family,
                 'from' => $from,
                 'to' => $to,
+                'mes' => $mes,
             ]);
         } else {
-            return view('routine.ranking-date');
+            return view('routine.ranking-date', [
+                'mes' => $mes,
+            ]);
         }
         // //getの時にm_staff_idカラムのデータも保持させる
         // // 実施ルーチンテーブルに登録されてるstaffのみを得点とともに表示する処理
@@ -292,5 +338,76 @@ class RoutineController extends Controller
         $request->session()->flash('message', $request->family_name.$request->given_name.'さんを登録しました。');
         $staff->save();
         return redirect('/routine/staff');
+    }
+    public function data(Request $request)
+    {
+        $space = Space::get();
+        $point = Point::orderBy('point', 'asc')->get();
+        $frequency = Frequency::get();
+        return view('/routine/data', [
+            'space' => $space,
+            'point' => $point,
+            'frequency' => $frequency,
+        ]);
+    }
+    public function createSpace(Request $request)
+    {
+        $this->validate($request, [
+            'space' => 'required|max:255',
+        ], [
+            'space.required' => '入力してください',
+        ]);
+        $space = new Space();
+        $space->space = $request->space;
+        $space->save();
+        $request->session()->flash('message', 'ルーチンスペースに"'.$space->space.'"を追加しました。');
+        return redirect('/routine/data');
+    }
+    public function destroySpace(Request $request, Space $space)
+    {
+        $space->delete();
+        $request->session()->flash('message', 'ルーチンスペースの"'.$space->space.'"を削除しました。');
+        return redirect('/routine/data');
+    }
+    public function createPoint(Request $request)
+    {
+        $this->validate($request, [
+            'point' => 'required|max:10|numeric',
+        ], [
+            'point.required' => '入力してください',
+            'point.max' => '桁が大きすぎます',
+            'point.numeric' => '数字を入力してください',
+        ]);
+        $point = new Point();
+        $point->point = $request->point;
+        $point->save();
+        $request->session()->flash('message', 'ポイントに"'.$point->point.'pt"を追加しました。');
+        return redirect('/routine/data');
+    }
+    public function destroyPoint(Request $request, Point $point)
+    {
+        $point->delete();
+        $request->session()->flash('message', 'ポイントの"'.$point->point.'pt"を削除しました。');
+        return redirect('/routine/data');
+    }
+    public function createFrequency(Request $request)
+    {
+        $this->validate($request, [
+            'frequency' => 'required|max:10',
+        ], [
+            'frequency.required' => '入力してください',
+            'frequency.max' => '最大10文字です',
+        ]);
+        $frequency = new Frequency();
+        $frequency->frequency = $request->frequency;
+        $frequency->save();
+        $request->session()->flash('message', '目安頻度に"'.$frequency->frequency.'"を追加しました。');
+        return redirect('/routine/data');
+    }
+    public function destroyFrequency(Request $request, Frequency $frequency)
+    {
+        $frequency->delete();
+        $request->session()->flash('message', '目安頻度の"'.$frequency->frequency.'"を削除しました。');
+        return redirect('/routine/data');
     }
 }

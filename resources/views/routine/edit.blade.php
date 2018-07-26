@@ -29,9 +29,11 @@
                 <label>ポイント</label>
                 <select name="point">
                     <option value="">未設定</option> 
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    @foreach($point as $val)
+                    <option value="{{$val->id}}" @if (old('point', $routine->point) == $val->id)
+                            selected
+                        @endif>{{$val->point}}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-group">

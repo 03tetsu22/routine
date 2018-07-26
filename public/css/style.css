@@ -25,8 +25,15 @@ header{
     background-color: #e2599b;
     color: #ffffff;
 }
-a{
-    color: #d24848 !important;
+.a-title{
+    color: #ffffff;
+}
+.a-title:hover{
+    color: #ffffff;
+    text-decoration: none;
+}
+li > a{
+    color: #d24848;
 }
 /*レイアウト*/
 .main-header{
@@ -94,9 +101,42 @@ a{
     width: 100%;
     padding-left: 15px;
 }
+/*home*/
+.score{
+    overflow: hidden;
+}
+.score-month{
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+.score-year{
+    float: left;
+    width: 50%;
+    text-align: center;   
+}
+.contents{
+    background-color: #dedede;
+    border-radius: 5px;
+    width: 70%;
+}
+.safe{
+    background-color: #58cc72;
+}
+.danger{
+    background-color: #ff6363;
+}
+.rest-pt{
+    font-size: 30px;
+}
+.pt-month,.pt-year{
+    font-size: 50px;
+}
+/*index*/
 .main-contents-index{
     background-color: #ffffff;
     margin-left: 200px;
+    height: 100%;
 }
 .routine{
     display: inline-block;
@@ -141,19 +181,26 @@ a{
     text-align: center;
     width: 60%;
 }
+.popover {
+    height: 50px;
+    width: 500px;
+}
+.fade{
+    opacity: 1!important;
+}
 /*ranking.blade.php*/
-.main-contents-rank{
+.main-contents-rank,.main-contents-history, .main-contents-home{
     background-color: #ffffff;
     margin-left: 300px;
     margin-right: 100px;
     margin-top: 50px;
 }
-.rank-top{
+.rank-top,.history-top{
     margin: 10px;
     overflow: hidden;
     position: relative;
 }
-.rank-day{
+.rank-day,.history-label{
     float: left;
     font-size: 20px;
     left: 40%;
@@ -172,12 +219,25 @@ a{
     position: relative;
     /*right: 30%;*/
 }
-.rank-table,.staff-table {
+.rank-table,.staff-table,.data-table {
     text-align: center;
 }
 .rank-table > td{
     /*border: 1px solid #000000!important;*/
     font-size: 20px;
+}
+.first{
+    color: #ca9f20;
+    font-size: 20px;
+}
+.first-font{
+    font-size: 20px;
+}
+.second{
+    color: #9FA0A0;
+}
+.third{
+    color: #C47022;
 }
 .rank-fromto{
     float: left;
@@ -208,3 +268,32 @@ a{
 /*.form-staff{
     margin: 10px;
 }*/
+
+/*data.blade.php*/
+.edit-area{
+    height: 100%;
+    overflow: hidden;
+}
+.space-area,.point-area{
+    float: left;
+    height: 100%;
+    width: 30%;
+}
+.frequency-area{
+    height: 100%;
+    margin-left: 60%;
+}
+.create-logo{
+    padding-left: 15px;
+}
+.data-table{
+    text-align: center;
+    width: 90%!important;
+}
+.new-form{
+    text-align: center;
+}
+.new-create{
+    border:1px solid #ced4da;
+    border-radius: 3px;
+}
