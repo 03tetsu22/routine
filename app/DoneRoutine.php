@@ -12,7 +12,7 @@ class DoneRoutine extends Model
     }
     public function pt()
     {
-        return $this->belongsTo(point::class, 'point');
+        return $this->belongsTo(Point::class, 'point');
     }
     protected $table = 't_done_routine';
 }
