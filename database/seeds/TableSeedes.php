@@ -13,15 +13,15 @@ class TableSeedes extends Seeder
     {
         $space = ['ベランダ', 'カフェスペース', '業務スペース', '受付裏スペース', '受付', '会議室', '給湯室', 'トイレ'];
         foreach ($space as $space) {
-            DB::table('m_space')->insert('space');
+            DB::table('m_space')->insert(['space' => $space]);
         }
         $point = [1, 2, 3];
         foreach ($point as $point) {
-            DB::table('m_point')->insert('spoint');
+            DB::table('m_point')->insert(['point' => $point]);
         }
         $frequency = ['一日一度', '週一度', '月一度', '適宜判断'];
         foreach ($frequency as $frequency) {
-            DB::table('m_frequency')->insert('frequency');
+            DB::table('m_frequency')->insert(['frequency' => $frequency]);
         }
         DB::table('m_routine')->insert([
             [
