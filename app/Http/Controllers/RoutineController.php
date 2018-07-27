@@ -334,7 +334,11 @@ class RoutineController extends Controller
         $staff->given_name = $request->given_name;
         $staff->email = $request->email;
         $staff->password = bcrypt($request->password);
-        $staff->role = $request->role;
+        if (is_null($request->role)) {
+            $staff->role = 10;
+        } else {
+            $staff->role = $request->role;
+        }
         $request->session()->flash('message', $request->family_name.$request->given_name.'さんを登録しました。');
         $staff->save();
         return redirect('/routine/staff');
