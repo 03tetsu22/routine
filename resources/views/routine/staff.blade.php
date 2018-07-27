@@ -125,11 +125,11 @@
                     </td>
                     @if($staff->role > 5)
                         <td>
-                            <form action="{{url('routine/'.$staff->id)}}" method="POST" class="form-inline delete">
+                            <form action="{{url('routine/staff/'.$staff->id)}}" method="POST" class="form-inline delete">
                             {{ csrf_field() }}
                             {{ method_field('DELETE') }}
 
-                            <button type="button" class="btn btn-danger btn-sm">削除</button>
+                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
                             </form>
                         </td>
                     @else

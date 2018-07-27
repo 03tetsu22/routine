@@ -343,6 +343,12 @@ class RoutineController extends Controller
         $staff->save();
         return redirect('/routine/staff');
     }
+    public function staffDestroy(Request $request, Staff $staff)
+    {
+        $staff->delete();
+        $request->session()->flash('message', $staff->family_name.$staff->given_name.'さんを削除しました。');
+        return redirect('/routine/staff');
+    }
     public function data(Request $request)
     {
         $space = Space::get();

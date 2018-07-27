@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('routine/staff', 'RoutineController@staff');
     Route::get('routine/{id}/staffEdit', ['as' => 'routine.staff-edit', 'uses' => 'RoutineController@staffEdit']);
     Route::patch('/routine/{id}/staff', 'RoutineController@staffUpdate');
+    Route::delete('/routine/staff/{staff}', 'RoutineController@staffDestroy');
     Route::post('routine/create', 'RoutineController@create');
 });
 Route::get('/routine/home', 'RoutineController@home');
