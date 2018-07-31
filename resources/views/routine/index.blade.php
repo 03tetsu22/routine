@@ -132,7 +132,11 @@
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-primary btn-sm">登録</button>
                             <input type="hidden" name="routine_name" value="{{$routine->routine_name}}">
-                            <input type="hidden" name="space" value="{{$routine->space->space}}">
+                            @if($routine->space == NULL)
+                                <input type="hidden" name="space" value="--">
+                            @else
+                                <input type="hidden" name="space" value="{{$routine->space->space}}">
+                            @endif
                             @if($routine->pt == NULL)
                                 <input type="hidden" name="point" value="0">
                             @else
