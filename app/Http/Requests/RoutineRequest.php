@@ -34,7 +34,7 @@ class RoutineRequest extends FormRequest
     {
         return[
         'name.required' => "ルーチン名は必須項目です。",
-        "name.max" =>"30文字以内で入力してください。",
+        "name.max" =>"ルーチン名は30文字以内で入力してください。",
         'point.required' => "ポイントは必須項目です。",
         'space.required' => "スペースは必須項目です。",
         'frequency.required' => "目安頻度は必須項目です。",

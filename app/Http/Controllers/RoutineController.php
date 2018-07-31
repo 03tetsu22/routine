@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use DateTime;
+use Illuminate\Validation\Rule;
 
 class RoutineController extends Controller
 {
@@ -314,6 +315,11 @@ class RoutineController extends Controller
     public function staffUpdate(Request $request, $id)
     {
         $staff = Staff::find($id);
+        $this->validate($request, [
+            'email' => Rule::unique('m_staff')->ignore($staff->id),
+        ], [
+            'email.unique' => 'このメールアドレスは登録済みです。',
+        ]);
         $staff->family_name = $request->family_name;
         $staff->given_name = $request->given_name;
         $staff->email = $request->email;
