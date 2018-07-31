@@ -21,10 +21,10 @@ $lastscore = 100000;
                     @else
                         <div class="rank-day">{{date('Y')}}年{{date('n')}}月成績表</div>
                     @endif
-                    <form action="{{ url('routine/ranking') }}" method="GET">
+                    <form action="{{ url('routine/ranking') }}" method="GET" class="select_form">
                         <div class="month-search">
-                            <select name="date">
-                            <!-- bladeテンプレートだと表示がバグる -->
+                            <select name="date" class="select_submit">
+                            <!-- bladeテンプレートだと表示がなぜかバグる -->
                             @foreach($select_date as $date)
                                 <option value="{{ $date }}"
                                 <?php
@@ -41,7 +41,7 @@ $lastscore = 100000;
                                 <option selected="selected">{{ date('Y') }}年{{ date('n') }}月</option>
                             @endif
                             </select>
-                            <button type="submit" class="btn btn-outline-dark">→表示</button>
+                            <!-- <button type="submit" class="btn btn-outline-dark">→表示</button> -->
                         </div>
                     </form>
                 </div>
@@ -87,7 +87,11 @@ $lastscore = 100000;
                                     $count++;
                                 }
                                 ?></td>
-                                <td>{{$result->staff->family_name}}</td>
+                                @if($result->staff == NULL)
+                                    <td>--</td>
+                                @else
+                                    <td>{{$result->staff->family_name}}</td>
+                                @endif
                                 <td>{{$result->sum}}</td>
                             </tr>
                             @endforeach

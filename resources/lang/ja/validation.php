@@ -68,7 +68,8 @@ return [
     'required_with_all'    => ':valuesのうちすべてが指定された時:attributeは必須です。',
     'required_without'     => ':valuesのうちいずれかがが指定されなかった時:attributeは必須です。',
     'required_without_all' => ':valuesのうちすべてが指定されなかった時:attributeは必須です。',
-    'same'                 => ':attributeが:otherと一致しません。',
+    'same'                 => 'パスワードが一致しません。',
+    // 'same.password_confirm' => 'パスワードが一致しません。',
     'size'                 => [
         'numeric' => ':attributeには:sizeを指定してください。',
         'file'    => ':attributeには:size KBのファイルを指定してください。',

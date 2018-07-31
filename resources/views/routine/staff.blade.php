@@ -68,9 +68,9 @@
                     <div class="col-md-8">
                         <input id="password" type="password" class="form-control" name="password" required>
 
-                        @if ($errors->has('password'))
+                        @if ($errors->has('password_confirm'))
                             <span class="help-block">
-                                <strong>{{ $errors->first('password') }}</strong>
+                                <strong>{{ $errors->first('password_confirm') }}</strong>
                             </span>
                         @endif
                     </div>
@@ -80,7 +80,7 @@
                     <label for="password-confirm" class="col-md-6 control-label">確認用パスワード</label>
 
                     <div class="col-md-8">
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                        <input id="password-confirm" type="password" class="form-control" name="password_confirm" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -111,34 +111,38 @@
                         
                     </tr>
                 </thead>
-                @foreach($staff as $staff)
-                <tr>
-                    <td>{{$staff->family_name}} {{$staff->given_name}}</td>
-                    <td>{{$staff->email}}</td>
-                    <td>@if($staff->role <= 5)
-                            ◯
-                        @else
-                            ×
-                        @endif</td>
-                    <td>
-                        <a href="{{$staff->id}}/staffEdit"><button type="button" class="btn btn-primary btn-sm">編集</button></a>
-                    </td>
-                    @if($staff->role > 5)
+                <tbody>
+                    @foreach($staffs as $staff)
+                    <tr>
+                        <td>{{$staff->family_name}} {{$staff->given_name}}</td>
+                        <td>{{$staff->email}}</td>
+                        <td>@if($staff->role <= 5)
+                                ◯
+                            @else
+                                ×
+                            @endif</td>
                         <td>
-                            <form action="{{url('routine/staff/'.$staff->id)}}" method="POST" class="form-inline delete">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-
-                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                            </form>
+                            <a href="{{$staff->id}}/staffEdit"><button type="button" class="btn btn-primary btn-sm">編集</button></a>
                         </td>
-                    @else
-                        <td>&nbsp;</td>
-                    @endif
-                    
-                </tr>
-                @endforeach
+                        @if($staff->role > 5)
+                            <td>
+                                <form action="{{url('routine/staff/'.$staff->id)}}" method="POST" class="form-inline delete">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+
+                                <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                                </form>
+                            </td>
+                        @else
+                            <td>&nbsp;</td>
+                        @endif
+                        
+                    </tr>
+                    @endforeach
+                </tbody>
+                {{ $staffs->links('vendor.pagination.bootstrap-4') }}
             </table>
+            {{ $staffs->links('vendor.pagination.bootstrap-4') }}
         </div>
     </div>
 </div>

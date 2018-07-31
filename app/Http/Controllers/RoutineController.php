@@ -118,7 +118,7 @@ class RoutineController extends Controller
         } else {
             $select_staff = Auth::id();
         }
-        $history = DoneRoutine::where('m_staff_id', $select_staff)->orderBy('created_at', 'desc')->with('pt')->get();
+        $history = DoneRoutine::where('m_staff_id', $select_staff)->orderBy('created_at', 'desc')->with('pt')->paginate(10);
         return view('/routine/history', [
             'staffs' => $staffs,
             'select_staff' => $select_staff,
@@ -298,9 +298,9 @@ class RoutineController extends Controller
     }
     public function staff()
     {
-        $staff = Staff::get();
+        $staffs = Staff::paginate(8);
         return view('routine.staff', [
-            'staff' => $staff,
+            'staffs' => $staffs,
         ]);
     }
     public function staffEdit($id)
@@ -317,18 +317,45 @@ class RoutineController extends Controller
         $staff->family_name = $request->family_name;
         $staff->given_name = $request->given_name;
         $staff->email = $request->email;
-        if (is_null($request->role)) {
-            $staff->role = 10;
-        } else {
-            $staff->role = $request->role;
+        $staffs = Staff::get();
+        $role_confirm = 1;
+        foreach ($staffs as $val) {
+            if ($val->role <= 5) {
+                $role_confirm++;
+            }
+        }
+        switch ($role_confirm) {
+            case 2:
+                if ($staff->role == 10 && $request->role ==5) {
+                    $staff->role = $request->role;
+                    $request->session()->flash('message', $request->family_name.$request->given_name.'さんの情報を編集しました。');
+                } else {
+                    $request->session()->flash('message', 'admin権限は剥奪できません。');
+                }
+                break;
+            
+            default:
+                if (is_null($request->role)) {
+                    $staff->role = 10;
+                } else {
+                    $staff->role = $request->role;
+                }
+                $request->session()->flash('message', $request->family_name.$request->given_name.'さんの情報を編集しました。');
+                break;
         }
         // dd($staff->role);
         $staff->save();
-        $request->session()->flash('message', $request->family_name.$request->given_name.'さんの情報を編集しました。');
         return redirect('/routine/staff');
     }
     public function create(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'unique:m_staff,email',
+            'password_confirm' => 'same:password'
+        ], [
+            'email.unique' => 'このメールアドレスは登録済みです。',
+            'same.password_confirm' => '一致しません。',
+        ]);
         $staff = new Staff();
         $staff->family_name = $request->family_name;
         $staff->given_name = $request->given_name;
@@ -363,9 +390,10 @@ class RoutineController extends Controller
     public function createSpace(Request $request)
     {
         $this->validate($request, [
-            'space' => 'required|max:255',
+            'space' => 'required|max:10',
         ], [
             'space.required' => '入力してください',
+            'space.max' => '最大10文字です',
         ]);
         $space = new Space();
         $space->space = $request->space;

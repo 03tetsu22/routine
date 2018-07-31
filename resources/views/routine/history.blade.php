@@ -18,9 +18,9 @@ foreach ($staffs as $staff) {
             @else
                 <div class="history-label">{{ $select_name }}さんの登録履歴</div>
             @endif
-            <form action="{{ url('routine/history') }}" method="GET">
+            <form action="{{ url('routine/history') }}" method="GET" class="select_form">
                 <div class="month-search">
-                    <select name="id">
+                    <select name="id" class="select_submit">
                         @foreach($staffs as $staff)
                             <option value="{{ $staff->id }}"
                             @if($select_id == $staff->id)
@@ -29,7 +29,7 @@ foreach ($staffs as $staff) {
                             >{{ $staff->family_name }} {{ $staff->given_name }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="btn btn-outline-dark">→表示</button>
+                    <!-- <button type="submit" class="btn btn-outline-dark">→表示</button> -->
                 </div>
             </form>
         </div>
@@ -49,12 +49,18 @@ foreach ($staffs as $staff) {
                     <tr>
                         <td>{{ $val->routine_name }}</td>
                         <td>{{ $val->space }}</td>
-                        <td>{{ $val->pt->point }}</td>
+                        @if($val->pt == NULL)
+                            <td>--</td>
+                        @else
+                            <td>{{ $val->pt->point }}</td>
+                        @endif
                         <td>{{ date_format($val->created_at, 'Y年n月j日') }}</td>
                     </tr>
                     @endforeach
                 </tbody>
+                {{ $history->links('vendor.pagination.bootstrap-4') }}
             </table>
+            {{ $history->links('vendor.pagination.bootstrap-4') }}
         </div>
         @endif
     </div>

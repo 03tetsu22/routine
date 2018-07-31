@@ -34,10 +34,13 @@ $(function(){
         $('.month').addClass('danger');
     }else if($('.pt-month').hasClass('clear')){
         $('.month').addClass('safe');
-    }
+    };
     if($('.pt-year').hasClass('out')){
         $('.year').addClass('danger');
     }else if($('.pt-year').hasClass('clear')){
         $('.year').addClass('safe');
-    }
+    };
+    $('.select_submit').change(function(){
+        $('.select_form').submit();
+    });
 });

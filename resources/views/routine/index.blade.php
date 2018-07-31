@@ -61,7 +61,7 @@
         </form>
     </div>
     @endcan
-    <div>
+    <div class="routine-box">
         <div class="contents-name">実施ルーチン登録</div>
         <div class="routine-space">
             <form action="{{ url('routine') }}" method="GET" class="form-inline" id="form0">
@@ -114,17 +114,30 @@
                                 @if($routine->routine_name == $val->routine_name)
                                     data-content="ここ一週間で{{$routine->routine_name}}は実施されています。"
                                     @break
+                                @else
+                                    data-content="ここ一週間で{{$routine->routine_name}}は実施されていません。"
                                 @endif
                             @endforeach data-placement="top">{{$routine->routine_name}}</div></td>
-
-                        <td>{{$routine->pt->point}}</td>
-                        <td>{{$routine->frequency->frequency}}</td>
+                        @if($routine->pt == NULL)
+                            <td>--</td>
+                        @else
+                            <td>{{ $routine->pt->point }}</td>
+                        @endif
+                        @if($routine->frequency == NULL)
+                            <td>--</td>
+                        @else
+                            <td>{{ $routine->frequency->frequency }}</td>
+                        @endif
                         <td><form action="{{ url('routine/register') }}" method="POST" class="form-inline">
                             {{ csrf_field() }}
                             <button type="submit" class="btn btn-primary btn-sm">登録</button>
                             <input type="hidden" name="routine_name" value="{{$routine->routine_name}}">
                             <input type="hidden" name="space" value="{{$routine->space->space}}">
-                            <input type="hidden" name="point" value="{{$routine->point}}">
+                            @if($routine->pt == NULL)
+                                <input type="hidden" name="point" value="0">
+                            @else
+                                <input type="hidden" name="point" value="{{$routine->pt->point}}">
+                            @endif
                             </form>
                         </td>
                         @can('admin-higher')

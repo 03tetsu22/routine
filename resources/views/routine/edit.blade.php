@@ -11,7 +11,7 @@
         <form action="{{ url('routine/'.$routine->id) }}" method="POST" class="form-inline">
         {{ csrf_field() }}
         {{ method_field('patch') }}
-            <div class="form-group form-inline">
+            <div class="form-group form-inline col-md-4">
                 <input type="text" name="name" id="routine-name" class="form-control" value="{{old('name', $routine->routine_name)}}" placeholder="ルーチン名">
             </div>
             <div class="form-group">

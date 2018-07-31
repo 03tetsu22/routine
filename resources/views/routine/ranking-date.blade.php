@@ -75,7 +75,11 @@ if ($_GET) {
                             $count++;
                         }
                         ?></td>
-                        <td>{{$result->staff->family_name}}</td>
+                        @if($result->staff == NULL)
+                            <td>--</td>
+                        @else
+                            <td>{{$result->staff->family_name}}</td>
+                        @endif
                         <td>{{$result->sum}}</td>
                     </tr>
                     @endforeach

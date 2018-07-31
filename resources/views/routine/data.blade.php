@@ -23,7 +23,7 @@
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>
             </form>
-            <div class="container">
+            <div class="container scroll">
                 <table class="table table-striped data-table">
                     <tbody>
                         @foreach($space as $space)
@@ -51,7 +51,7 @@
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>
             </form>
-            <div class="container">
+            <div class="container scroll">
                 <table class="table table-striped data-table">
                     <tbody>
                         @foreach($point as $point)
@@ -79,7 +79,7 @@
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>
             </form>
-            <div class="container">
+            <div class="container scroll">
                 <table class="table table-striped data-table">
                     <tbody>
                         @foreach($frequency as $frequency)
