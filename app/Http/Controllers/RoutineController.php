@@ -93,7 +93,7 @@ class RoutineController extends Controller
             'frequency' => $frequency,
         ]);
     }
-    public function update(Request $request, $id)
+    public function update(RoutineRequest $request, $id)
     {
         $routine = Routine::find($id);
         $routine->routine_name = $request->name;
@@ -393,7 +393,7 @@ class RoutineController extends Controller
             'space' => 'required|max:10',
         ], [
             'space.required' => '入力してください',
-            'space.max' => '最大10文字です',
+            'space.max' => 'ルーチンスペースは10文字以内で入力してください。',
         ]);
         $space = new Space();
         $space->space = $request->space;
@@ -434,7 +434,7 @@ class RoutineController extends Controller
             'frequency' => 'required|max:10',
         ], [
             'frequency.required' => '入力してください',
-            'frequency.max' => '最大10文字です',
+            'frequency.max' => '目安頻度は10文字以内で入力してください。',
         ]);
         $frequency = new Frequency();
         $frequency->frequency = $request->frequency;
