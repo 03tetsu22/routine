@@ -49,10 +49,10 @@ foreach ($staffs as $staff) {
                     <tr>
                         <td>{{ $val->routine_name }}</td>
                         <td>{{ $val->space }}</td>
-                        @if($val->pt == NULL)
+                        @if($val->point == NULL)
                             <td>--</td>
                         @else
-                            <td>{{ $val->pt->point }}</td>
+                            <td>{{ $val->point }}</td>
                         @endif
                         <td>{{ date_format($val->created_at, 'Y年n月j日') }}</td>
                     </tr>

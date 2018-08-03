@@ -99,20 +99,22 @@ $lastscore = 100000;
                             @if(!empty($zero_family))
                                 @foreach($zero_family as $family)
                                 <tr>
-                                    @switch($rank)
-                                        @case(1)
-                                            <td class="first">{{ $rank.'st' }}</td>
-                                            @break
-                                        @case(2)
-                                            <td class="second">{{ $rank.'nd' }}</td>
-                                            @break
-                                        @case(3)
-                                            <td class="third">{{ $rank.'rd' }}</td>
-                                            @break
-                                        @default
-                                            <td>{{ $rank.'th' }}</td>
-                                            @break
-                                    @endswitch
+                                    @if(!$done_routine->isEmpty())
+                                        @switch($rank)
+                                            @case(1)
+                                                <td class="first">{{ $rank.'st' }}</td>
+                                                @break
+                                            @case(2)
+                                                <td class="second">{{ $rank.'nd' }}</td>
+                                                @break
+                                            @case(3)
+                                                <td class="third">{{ $rank.'rd' }}</td>
+                                                @break
+                                            @default
+                                                <td>{{ $rank.'th' }}</td>
+                                                @break
+                                        @endswitch
+                                    @endif
                                     <td>{{$family}}</td>
                                     <td>0</td>
                                 </tr>

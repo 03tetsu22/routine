@@ -41,10 +41,11 @@ class RoutineController extends Controller
         $space = Space::get();
         $point = Point::orderBy('point', 'asc')->get();
         $frequency = Frequency::get();
-        $routines = Routine::with('frequency')->with('space')->with('pt')->get();
+        $routines = Routine::with('frequency')->with('space')->with('pt');
         if ($request->select) {
             $routines = $routines->where('m_space_id', $request->select);
         }
+        $routines = $routines->paginate(7) ->appends($request->only(['select']));
         $today = date('Y-m-d', strtotime('+1 day', time()));
         $weekago = new DateTime($today);
         $weekago = $weekago->modify('-8 days')->format('Y-m-d');
@@ -85,7 +86,7 @@ class RoutineController extends Controller
         // dd($id);
         $routine = Routine::find($id);
         $space = Space::get();
-        $point = Point::get();
+        $point = Point::orderBy('point', 'asc')->get();
         $frequency = Frequency::get();
         return view('routine.edit', [
             'routine' => $routine,
@@ -119,7 +120,7 @@ class RoutineController extends Controller
         } else {
             $select_staff = Auth::id();
         }
-        $history = DoneRoutine::where('m_staff_id', $select_staff)->orderBy('created_at', 'desc')->with('pt')->paginate(10);
+        $history = DoneRoutine::where('m_staff_id', $select_staff)->orderBy('created_at', 'desc')->paginate(10)->appends($request->only(['id']));
         return view('/routine/history', [
             'staffs' => $staffs,
             'select_staff' => $select_staff,
@@ -142,17 +143,21 @@ class RoutineController extends Controller
         // $zero_given = [];
         $nofind;
         foreach ($staffs as $staff) {
-            foreach ($done_routine as $val) {
-                if ($staff->id == $val->m_staff_id) {
-                    if (isset($nofind)) {
-                        unset($nofind);
+            if (!$done_routine->isEmpty()) {
+                foreach ($done_routine as $val) {
+                    if ($staff->id == $val->m_staff_id) {
+                        if (isset($nofind)) {
+                            unset($nofind);
+                        }
+                        break;
+                    } else {
+                        $nofind = 1;
                     }
-                    break;
-                } else {
-                    $nofind = 1;
                 }
-            }
-            if (isset($nofind)) {
+                if (isset($nofind)) {
+                    array_push($zero_family, $staff->family_name);
+                }
+            } else {
                 array_push($zero_family, $staff->family_name);
             }
         }
@@ -395,6 +400,7 @@ class RoutineController extends Controller
     }
     public function createSpace(Request $request)
     {
+        // $request->space = trim(mb_convert_kana($request->space, "s"));
         $this->validate($request, [
             'space' => 'required|max:10',
         ], [

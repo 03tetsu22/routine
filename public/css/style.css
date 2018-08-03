@@ -185,7 +185,7 @@ li > a{
 }
 .routine{
     height: 90%;
-    overflow: scroll;
+    /*overflow: scroll;*/
     text-align: center;
     width: 60%;
 }

@@ -160,7 +160,9 @@
                     
                    @endforeach
                 </tbody>
+                {{ $routines->links('vendor.pagination.bootstrap-4') }}
             </table>
+            {{ $routines->links('vendor.pagination.bootstrap-4') }}
         </div>
         @endif
     </div>

@@ -19,7 +19,7 @@ $lastscore = 100000;
                     @if($_GET)
                         <div class="rank-day">{{ $year }}年{{ $month }}月成績表</div>
                     @else
-                        <div class="rank-day">{{date('Y')}}年{{date('n')}}月成績表</div>
+                        <div class="rank-day">{{date('Y年n月')}}成績表</div>
                     @endif
                     <form action="{{ url('routine/ranking') }}" method="GET" class="select_form">
                         <div class="month-search">
@@ -38,7 +38,7 @@ $lastscore = 100000;
                                 </option>
                             @endforeach
                             @if ($max < date('Y-m'))
-                                <option selected="selected">{{ date('Y') }}年{{ date('n') }}月</option>
+                                <option selected="selected">{{ date('Y年n月')}}</option>
                             @endif
                             </select>
                             <!-- <button type="submit" class="btn btn-outline-dark">→表示</button> -->
@@ -99,20 +99,22 @@ $lastscore = 100000;
                             @if(!empty($zero_family))
                                 @foreach($zero_family as $family)
                                 <tr>
-                                    @switch($rank)
-                                        @case(1)
-                                            <td class="first">{{ $rank.'st' }}</td>
-                                            @break
-                                        @case(2)
-                                            <td class="second">{{ $rank.'nd' }}</td>
-                                            @break
-                                        @case(3)
-                                            <td class="third">{{ $rank.'rd' }}</td>
-                                            @break
-                                        @default
-                                            <td>{{ $rank.'th' }}</td>
-                                            @break
-                                    @endswitch
+                                    @if(!$done_routine->isEmpty())
+                                        @switch($rank)
+                                            @case(1)
+                                                <td class="first">{{ $rank.'st' }}</td>
+                                                @break
+                                            @case(2)
+                                                <td class="second">{{ $rank.'nd' }}</td>
+                                                @break
+                                            @case(3)
+                                                <td class="third">{{ $rank.'rd' }}</td>
+                                                @break
+                                            @default
+                                                <td>{{ $rank.'th' }}</td>
+                                                @break
+                                        @endswitch
+                                    @endif
                                     <td>{{$family}}</td>
                                     <td>0</td>
                                 </tr>
