@@ -304,6 +304,7 @@ li > a{
 }
 .new-form{
     text-align: center;
+    margin-bottom: 10px;
 }
 .new-create{
     border:1px solid #ced4da;

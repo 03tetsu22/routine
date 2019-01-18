@@ -19,7 +19,7 @@
             <form class="form-horizontal" method="POST" action="{{ url('routine/space/create') }}">
                 {{ csrf_field() }}
                 <div class="new-form">
-                    <input type="text" name="space" class="new-create" value="{{old('space')}}">
+                    <input type="text" name="space" class="new-create" value="{{old('space')}}" maxlength="10">
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>
             </form>
